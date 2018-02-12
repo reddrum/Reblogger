@@ -1,5 +1,5 @@
 class TweetsController < ApplicationController
-  before_action :set_tweet, only: [:show, :edit, :update, :destroy]
+  before_action :set_tweet, only: [:show, :edit, :update, :destroy, :retweet]
 
   # GET /tweets
   # GET /tweets.json
@@ -58,6 +58,15 @@ class TweetsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to tweets_url, notice: 'Tweet was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def retweet
+    tweet = current_user.tweets.new(tweet_id: @tweet.id)
+    if tweet.save
+      redirect_to tweets_path
+    else
+      redirect_to :back, alert: "Unable to retweet"
     end
   end
 
